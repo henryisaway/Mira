@@ -55,20 +55,20 @@ class Utility(commands.Cog):
 			helpMessage = ""
 			
 			if args == "" or args == "--dm":
-				helpTextPath = "../text_files/helpMenu.txt"
+				helpTextPath = "../.text_files/helpMenu.txt"
 				helpMessage += f"## Ajuda Mira\n**Prefixo:** `{serverPrefix}`\nDigite `{serverPrefix}ajuda [categoria]` para ver cada categoria em mais detalhes.\n\n" 
 			else:
 				if "utilidade" in args.lower():
-					helpTextPath = "../text_files/helpUtility.txt"
+					helpTextPath = "../.text_files/helpUtility.txt"
 					
 				elif "rpg" in args.lower():
-					helpTextPath = "../text_files/helpRPG.txt"
+					helpTextPath = "../.text_files/helpRPG.txt"
 					
 				elif "misc" in args.lower():
-					helpTextPath = "../text_files/helpMisc.txt"
+					helpTextPath = "../.text_files/helpMisc.txt"
 					
 				else:
-					helpTextPath = "../text_files/helpError.txt"
+					helpTextPath = "../.text_files/helpError.txt"
 					
 				helpMessage = f"## Lista de comandos\n**Prefixo**: `{serverPrefix}`\n"
 		   
@@ -87,7 +87,7 @@ class Utility(commands.Cog):
 	# Changelog command: Shows Mira's Latest updates
 	@commands.command(aliases = ['cl', 'updates', 'upd'])
 	async def changelog(self, ctx, *args):
-		message = utils.getTextFromFile("../text_files/changelog.txt")
+		message = utils.getTextFromFile("../.text_files/changelog.txt")
 	
 		if "--dm" in args:
 			await ctx.author.send(message)

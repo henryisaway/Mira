@@ -1,0 +1,7 @@
+### Utilidade
+- **ajuda | help | a | h**: Exibe esta mensagem. Caso deseje que a mensagem seja enviada em suas mensagens privadas, digite "--dm" após o comando. Exemplo: `+ajuda --dm`.
+- **changelog | cl | updates | upd**: Exibe uma descrição da atualização mais recente para a Mira. Caso deseje que a mensagem seja enviada em suas mensagens privadas, digite "--dm" após o comando. Exemplo: `+updates --dm`.
+- **eco | echo**: Repete a frase dita pelo usuário. A sintáxe é `eco [frase]`.
+- **ping**: Informa o tempo de resposta da Mira.
+- **prefixo | prefix**: Exibe o prefixo da Mira no servidor atual. Caso possua permissões de Admnistrador, você também pode mudar o prefixo do bot, através da sintaxe `+prefixo [novo prefixo]`.
+- **math | conta**: Executa uma expressão matemática informada pelo usuário

@@ -1,0 +1,1 @@
+Categoria não encontrada! O comando é `ajuda [categoria]` - as categorias estão listadas no comando `ajuda`.

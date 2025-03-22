@@ -1,0 +1,6 @@
+Bem vindo ao menu de ajuda da Mira! Sobre qual categoria de comandos você tem dúvida?
+- **Utilidade:** Ferramentas de utilidade geral.
+ - Contém: ajuda, eco, changelog, conta, ping, prefixo
+- **RPG:** Ferramentas para jogar RPGs de mesa.
+ - Contém: roll, teste
+- **Misc:** Alguns comandos que não se enquadram nas outras categorias.

@@ -1,0 +1,3 @@
+### RPG
+- **roll | r**: Rola um ou mais dados. A sintáxe é: XdY+Z*W ou XdY+Z/W, exclusivamente nessa ordem. Exemplo de uso: roll 1d6+3*2, rola um dado de 6 lados, adiciona três ao resultado e multiplica tudo por 2.
+- **teste | test | t**: Comando disponível para Dark Forest 2: Memórias Fantasma. Sintáxe é `teste [valor de atributo]`, sendo que o valor deve estar entre 1 e 99.

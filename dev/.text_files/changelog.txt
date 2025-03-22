@@ -1,0 +1,7 @@
+## Mira bot
+**Versão**: `2.0`
+- Reestruturação completa do código da Mira, com melhoria em diversos comandos;
+- Comando `ajuda | help | a | h` atualizado: Agora conta com um menu e comandos separados por categoria.
+- Comando `eco | echo` adicionado: Faz a Mira repetir o que foi dito pelo usuário;
+- Comando `teste | t` atualizada: Agora o teste segue as regras de Daggerheart;
+- Comando `roll | r` atualizado: Os dados são mostrados individualmente, contanto que menos de 10 dados sejam rolados de uma só vez. Limite de rolagens simultâneas aumentado para 1.000.000;

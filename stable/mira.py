@@ -18,7 +18,7 @@ coloramaINIT()
 # Bot variables setup
 load_dotenv(".env")
 token: str = os.getenv("DISCORD_TOKEN")
-version = "2.0.3"
+version = "2.1.1"
 intents = discord.Intents.all()
 activity = f"Version {version}"
 

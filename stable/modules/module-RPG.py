@@ -2,6 +2,7 @@
 import discord
 from discord.ext import commands
 import modules.utils as utils
+import modules.dice_parser as parser
 import re
 import random
 
@@ -13,121 +14,36 @@ coloramaINIT()
 
 class RPG(commands.Cog):
 
-    # Constructor
-    def __init__(self, bot):
-        self.bot = bot
-    
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print(f"RPG cog listener is {Fore.GREEN}ready{Style.RESET_ALL}.")
-        
-    #-------------------------------------------------------
+	# Constructor
+	def __init__(self, bot):
+		self.bot = bot
+	
+	@commands.Cog.listener()
+	async def on_ready(self):
+		print(f"RPG cog listener is {Fore.GREEN}ready{Style.RESET_ALL}.")
+		
+	#-------------------------------------------------------
 
-    # Dice roll command: rolls any number of any type of dice
-    @commands.command(aliases = ['r'])
-    async def roll(self, ctx, *, diceNotation: str):
-        try:
-            try:
-                pattern = r'(\d+)d(\d+)([+-]?\d+)?([*]?\d+)?([/]?\d+)?'
-                match = re.search(pattern, diceNotation)
-                
-                message = ""
-                
-                numDice = int(match.group(1))
-                diceSize = int(match.group(2))
-                rollMod = int(match.group(3) or 0)
-                rollMultMatch = match.group(4)
-                rollDivMatch = match.group(5)
+	# Dice roll command: rolls any number of any type of dice
+	@commands.command(aliases = ['r'])
+	async def roll(self, ctx, *, expression: str):
+		try:
+			total, details = parser.parseExpression(expression)
+			response = (
+				f"Dados: {', '.join(details)}\n"
+				f"Total: {total}"
+			)
 
-                if rollMultMatch:
-                    rollMult = int(rollMultMatch[1:])
-                else:
-                    rollMult = 1
-                if rollDivMatch:
-                    rollDiv = int(rollDivMatch[1:])
-                else:
-                    rollDiv = 1
-            except:
-                await ctx.reply("Notação inválida. Exemplo de uso correto: 3d10+2*2. Modificadores e multiplicadores são opcionais.")
-                return
-
-            # Error handling
-            if numDice < 1:
-                await ctx.reply("Por favor, role no mínimo um dado.")
-                return
-            if numDice > 1000000:
-                await ctx.reply("O limite de dados em uma única rolagem é 1 milhão.")
-                return
-            if diceSize < 1:
-                await ctx.reply("Por favor, role um dado com no mínimo um lado.")
-                return
-            if diceSize > 1000000:
-                await ctx.reply("O limite do tamanho dos dados é 1 milhão de lados.")
-                return
-            
-            # Dice rolling
-            rolls = [random.randint(1, diceSize) for i in range(numDice)]
-            rollSum = sum(rolls)
-
-            message += f"{ctx.author.mention} rola {numDice}d{diceSize}, resultando em: "
-            
-            # Output message handling
-            if 1 < len(rolls) <= 10:
-                message += f"{' + '.join(map(str, rolls))} = **{rollSum}**"
-            else:
-                message += f"**{rollSum}**"
-
-            if rollMod:
-                message += f"\nAdicionando seu modificador de "
-                if rollMod > 0:
-                    message += f"+{rollMod}"
-                else:
-                    message += f"{rollMod}"
-                message += f", o resultado é: **{rollSum + rollMod}**"
-
-            if rollMult != 1:
-                message += f"\nMultiplicando o resultado por {rollMult}, o resultado final é: **{(rollSum + rollMod) * rollMult}**"
-
-            if rollDiv != 1:
-                message += f"\nDividindo o resultado por {rollDiv}, o resultado final é: **{(rollSum + rollMod) * rollMult / rollDiv}**"
-
-            await ctx.reply(message)
-        except Exception as e:
-            await ctx.reply(f"Um erro ocorreu: {e}")
-    
-    # Skill check command: Adaptable skill check command.
-    @commands.command(aliases = ['t', 'test'])
-    async def teste(self, ctx, mod = "0"):
-        try:        
-            mod = int(mod)
-
-            hope = random.randint(1, 12)
-            fear = random.randint(1, 12)
-            result_message = f"{ctx.author.mention} rola sua dualidade...\nDado da **Esperança**: `{hope}`\nDado do **Medo**: `{fear}`\n"
-            
-            if mod:
-                result_message += f"O seu modificador é __{'+' if mod > 0 else ''}{mod}__.\n\n"
-            if hope == fear:
-                result_message += "__Um **sucesso crítico**!__ :sparkles:"
-            elif hope > fear:
-                result_message += f"__Você consegue {hope+fear+mod} com **Esperança**!__"
-            elif fear > hope:
-                result_message += f"__Você consegue {hope+fear+mod} com **Medo**...__"
-            
-            
-            await ctx.reply(result_message)
-        except ValueError:
-            await ctx.reply(f"Uso inválido. A sintáxe do comando é `{utils.getPrefix(ctx)}teste <modificador>`")
-        except Exception as e:
-            await ctx.reply(f"Um erro ocorreu: {e}")
-            
-    @commands.command(aliases = ['abençoe', 'abençoar', 'benção'])
-    async def bencao(self, ctx):
-        try:
-            await ctx.reply(f"Seus dados foram abençoados pelo Drúida Cavaleiro, {ctx.author.mention}")
-        except Exception as e:
-            await ctx.reply(f"Um erro ocorreu: {e}")
-    
+			# Split the response into chunks of 2000 characters or less
+			if len(response) > 2000:
+				chunks = [response[i:i+2000] for i in range(0, len(response), 2000)]
+				for chunk in chunks:
+					await ctx.send(chunk)
+			else:
+				await ctx.reply(response)
+		except Exception as e:
+			await ctx.reply(f"Um erro ocorreu: {e}")
+	
 async def setup(bot):
-    await bot.add_cog(RPG(bot))
-    print("RPG module has finished loading.\n")
+	await bot.add_cog(RPG(bot))
+	print("RPG module has finished loading.\n")

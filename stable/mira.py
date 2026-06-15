@@ -1,7 +1,6 @@
 # Library Importing
 import discord
 from discord.ext import commands
-import token
 import sqlite3
 import os
 import asyncio
@@ -18,7 +17,7 @@ coloramaINIT()
 # Bot variables setup
 load_dotenv(".env")
 token: str = os.getenv("DISCORD_TOKEN")
-version = "2.1.1"
+version = "2.1.2"
 intents = discord.Intents.all()
 activity = f"Version {version}"
 
@@ -92,9 +91,7 @@ async def on_disconnect():
 #-----------------------------------------------------------
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-
     try:
-        loop.run_until_complete(main())
+        asyncio.run(main())
     except KeyboardInterrupt:
-        loop.run_until_complete(shutdown())
+        pass

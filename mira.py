@@ -1,7 +1,6 @@
 # Library Importing
 import discord
 from discord.ext import commands
-import token
 import sqlite3
 import os
 import asyncio
@@ -18,7 +17,7 @@ coloramaINIT()
 # Bot variables setup
 load_dotenv(".env")
 token: str = os.getenv("DISCORD_TOKEN")
-version = "2.1.1"
+version = "2.1.2"
 intents = discord.Intents.all()
 activity = f"Version {version}"
 
@@ -28,8 +27,8 @@ activity = f"Version {version}"
 async def getPrefixMain(bot, message):
     return utils.getPrefix(message)
 
-luna = commands.Bot(command_prefix = getPrefixMain, intents=intents)
-luna.remove_command("help")
+mira = commands.Bot(command_prefix = getPrefixMain, intents=intents)
+mira.remove_command("help")
 #-----------------------------------------------------------
 
 # Prefixes database connection
@@ -47,13 +46,13 @@ async def load():
         if filename.endswith(".py") and filename.startswith("module-"):
             try:
                 print(f"Loading extension: {Fore.RED}{Style.BRIGHT}{filename}...{Style.RESET_ALL}")
-                await luna.load_extension(f"modules.{filename[:-3]}")
+                await mira.load_extension(f"modules.{filename[:-3]}")
             except Exception as e:
                 print(f"{Fore.RED}Failed to load extension {filename}. Error: {e}{Style.RESET_ALL}")
                 await shutdown()
 
 async def shutdown():
-    await luna.close()
+    await mira.close()
 
 async def main():
     try:
@@ -64,37 +63,35 @@ async def main():
             
         await load()
         print(f"{Fore.YELLOW}Logging in...{Style.RESET_ALL}")
-        await luna.start(token)
+        await mira.start(token)
     except KeyboardInterrupt:
-        await luna.close()
-        await luna.on_disconnect()
+        await mira.close()
+        await mira.on_disconnect()
     
-@luna.event
+@mira.event
 async def on_ready():
     try:
         if os.name == 'nt':
             os.system("clr")
         else:
             os.system("clear")
-        print(f"{Fore.GREEN}Logged in{Style.RESET_ALL} as {Fore.BLUE}{Style.BRIGHT}{luna.user.name}{Style.RESET_ALL}")
-        await luna.change_presence(activity=discord.Game(name=activity))
+        print(f"{Fore.GREEN}Logged in{Style.RESET_ALL} as {Fore.BLUE}{Style.BRIGHT}{mira.user.name}{Style.RESET_ALL}")
+        await mira.change_presence(activity=discord.Game(name=activity))
     except Exception as e:
         print(e)
 
-@luna.event
+@mira.event
 async def on_connect():
     print(f"\nSucessfully connected to Discord.")
 
-@luna.event
+@mira.event
 async def on_disconnect():
     conn.close()
     print(f"\nSucessfully disconnected from Discord.")
 #-----------------------------------------------------------
 
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-
     try:
-        loop.run_until_complete(main())
+        asyncio.run(main())
     except KeyboardInterrupt:
-        loop.run_until_complete(shutdown())
+        pass
